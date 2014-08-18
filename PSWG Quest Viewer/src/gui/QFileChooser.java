@@ -8,7 +8,7 @@ import javax.swing.filechooser.FileFilter;
 /**
  * @author wallaceg09
  * 
- * License: http://opensource.org/licenses/LGPL-3.0
+ * License: http://opensource.org/licenses/GPL-3.0
  *
  */
 public class QFileChooser extends JFileChooser{
