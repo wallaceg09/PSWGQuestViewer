@@ -28,7 +28,7 @@ import parser.XMLParser;
  */
 public class ViewerJFrame extends JFrame implements ActionListener{
 	
-	private static String testQuestFilepath = "G:\\ExternalGit\\ProjectSWG\\clientdata\\quest\\tatooine\\speeder_quest.qst";
+	//private static String testQuestFilepath = "G:\\ExternalGit\\ProjectSWG\\clientdata\\quest\\tatooine\\speeder_quest.qst";
 	
 	private JTree questTree;
 	private JTextArea questText;			//probably not going to use...
@@ -107,7 +107,7 @@ public class ViewerJFrame extends JFrame implements ActionListener{
 		{
 			//Inefficient but I can't be bothered to figure out how to fucking do this properly
 			this.getContentPane().remove(questTreeScrollPane);
-			questTree = parser.getJTree(testQuestFilepath, showNulls);
+			questTree = parser.getJTree(file, showNulls);
 			questTree.invalidate();
 			questTreeScrollPane = new JScrollPane(questTree);
 			this.setTitle("PSWG Quest Viewer - " + file.getName());
