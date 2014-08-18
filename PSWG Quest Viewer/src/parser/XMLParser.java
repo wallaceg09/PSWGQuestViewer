@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListResourceBundle;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -106,6 +107,8 @@ public class XMLParser {
 		DefaultMutableTreeNode tasks = null;
 		DefaultMutableTreeNode list = null;
 		
+		TreeMap<String, String> listMap = new TreeMap<String, String>();
+		
 		List<QuestTask> questList = new ArrayList<QuestTask>();
 		try {
 			dBuilder = dbFactory.newDocumentBuilder();
@@ -142,10 +145,14 @@ public class XMLParser {
 												
 						for(Entry<String, String> entry : questMapEntry)
 						{
+							QuestEntry convertedQuestmapEntry = new QuestEntry(entry);
+							DefaultMutableTreeNode entryNode = new DefaultMutableTreeNode(convertedQuestmapEntry);
 							if(!showNulls && !entry.getValue().equals(""))
 							{
-								QuestEntry convertedQuestmapEntry = new QuestEntry(entry);
-								DefaultMutableTreeNode entryNode = new DefaultMutableTreeNode(convertedQuestmapEntry);
+								entryNode.add(new DefaultMutableTreeNode(convertedQuestmapEntry.getValue()));
+								task.add(entryNode);
+							}else if(showNulls)
+							{
 								entryNode.add(new DefaultMutableTreeNode(convertedQuestmapEntry.getValue()));
 								task.add(entryNode);
 							}
@@ -156,6 +163,46 @@ public class XMLParser {
 				}
 			}
 			//End task node
+			//List node
+			NodeList listNL = doc.getElementsByTagName("list");
+			Node listNode = listNL.item(0);
+			Element listElement;
+			if((listElement = getElement(listNode)) != null)
+			{
+				DefaultMutableTreeNode listTreeNode = new DefaultMutableTreeNode(listElement.getNodeName());
+				NodeList dataNodes = listElement.getElementsByTagName("data");
+				for(int dataNodeNum = 0; dataNodeNum < dataNodes.getLength(); ++dataNodeNum)
+				{
+					Node dataNode = dataNodes.item(dataNodeNum);
+					Element dataElement;
+					if((dataElement = getElement(dataNode)) != null)
+					{
+						listMap.put(dataElement.getAttribute("name"), dataElement.getAttribute("value"));
+					}
+				}
+				
+				//TODO: refactor this into its own method...
+				Set<Entry<String, String>> listEntry = listMap.entrySet();
+				
+				for(Entry<String, String> entry : listEntry)
+				{
+					QuestEntry convertedQuestmapEntry = new QuestEntry(entry);
+					DefaultMutableTreeNode entryNode = new DefaultMutableTreeNode(convertedQuestmapEntry);
+					if(!showNulls && !entry.getValue().equals(""))
+					{
+						entryNode.add(new DefaultMutableTreeNode(convertedQuestmapEntry.getValue()));
+						listTreeNode.add(entryNode);
+					}else if(showNulls)
+					{
+						entryNode.add(new DefaultMutableTreeNode(convertedQuestmapEntry.getValue()));
+						listTreeNode.add(entryNode);
+					}
+				}	
+				//TODO: end refactor
+				root.add(listTreeNode);
+			}
+			
+			//End list node
 
 			return new JTree(root);
 		} catch (ParserConfigurationException e) {

@@ -110,6 +110,7 @@ public class ViewerJFrame extends JFrame implements ActionListener{
 			questTree = parser.getJTree(testQuestFilepath, showNulls);
 			questTree.invalidate();
 			questTreeScrollPane = new JScrollPane(questTree);
+			this.setTitle("PSWG Quest Viewer - " + file.getName());
 		}
 		else
 		{

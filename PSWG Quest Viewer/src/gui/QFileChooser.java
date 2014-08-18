@@ -12,8 +12,11 @@ import javax.swing.filechooser.FileFilter;
  *
  */
 public class QFileChooser extends JFileChooser{
+	//Change this to suit your filepath structure.
+	private static String baseFilepath = "G:\\ExternalGit\\ProjectSWG";
 	public QFileChooser()
 	{
+		this.setCurrentDirectory(new File(baseFilepath + "\\clientdata\\quest"));
 		/*
 		this.setFileFilter(new FileFilter() {
 			
